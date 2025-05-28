@@ -17,7 +17,7 @@ if st.button("Generate My Plan"):
         prompt = (
             f"You are a track and field coach. Based on this athlete input:\n"
             f"{user_input}\n"
-            f"Please create a customized training plan including warm-up, main workout, "
+            f"Please create a customized training plan including warm-up, main workout,"
             f"cool-down, and any advice to address physical concerns."
         )
 
