@@ -1,41 +1,40 @@
 import openai
 import streamlit as st
 
-#  OpenAI key 
+# Load your OpenAI API key
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-st.set_page_config(page_title="AI Track Coach", page_icon="🏃‍♀️")
-st.title("🏃‍♀️ AI Track Coach")
-st.subheader("Get custom training advice based on your goals and physical/needs.")
-#  fields
-goal = st.text_input("What is your training goal? (e.g. improve sprint speed)")
-issue = st.text_input("Any physical issues or concerns? (e.g. tight hamstrings)")
-time = st.slider("How many minutes do you have to train today?", 10, 120, 30)
+# Streamlit UI
+st.title("AI Track Coach")
+st.write("Tell me your training goals and any physical concerns (e.g. tight hamstrings).")
 
+user_input = st.text_area("Enter your info here:")
 
 if st.button("Generate My Plan"):
-    prompt = (
-        f"I am a track athlete with the following details:\n"
-        f"- Training goal: {goal}\n"
-        f"- Physical issues: {issue}\n"
-        f"- Available training time: {time} minutes\n\n"
-        "Please create a customized training plan including warm-up, main workout, "
-        "cool-down, and any advice to address physical concerns."
-    )
-    
-    try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",  # or your preferred model
-            prompt=prompt,
-            max_tokens=300,
-            temperature=0.7,
-            n=1,
-            stop=None,
+    if not user_input:
+        st.warning("Please enter your training goals and physical concerns.")
+    else:
+        prompt = (
+            f"You are a track and field coach. Based on this athlete input:\n"
+            f"{user_input}\n"
+            f"Please create a customized training plan including warm-up, main workout, "
+            f"cool-down, and any advice to address physical concerns."
         )
-        plan = response.choices[0].text.strip()
-        st.write("### Your Customized Training Plan:")
-        st.write(plan)
-    except Exception as e:
-        st.error(f"Error generating plan:{e}")
 
-       
+        try:
+            response = openai.chat.completions.create(
+                model="gpt-3.5-turbo",  # You can use "gpt-4" if you have access
+                messages=[
+                    {"role": "system", "content": "You are a helpful and expert track coach."},
+                    {"role": "user", "content": prompt},
+                ],
+                max_tokens=500,
+                temperature=0.7,
+            )
+
+            plan = response.choices[0].message.content.strip()
+            st.write("### Your Customized Training Plan:")
+            st.write(plan)
+
+        except Exception as e:
+            st.error(f"Error generating plan: {e}")
