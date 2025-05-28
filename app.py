@@ -36,6 +36,6 @@ if st.button("Generate My Plan"):
         st.write("### Your Customized Training Plan:")
         st.write(plan)
     except Exception as e:
-        st.error(f"Error 
+        st.error(f"Error generating plan:{e}")
 
        
