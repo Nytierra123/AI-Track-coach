@@ -23,13 +23,12 @@ if st.button("Generate My Plan"):
     if not user_input:
         st.warning("Please enter your training goals and physical concerns.")
     else:
-        full_prompt = (
-            f"You are a track and field coach. Based on this athlete input:\n"
-            f"{user_input}\n"
-            f"Please create a customized training plan including warm-up, main workout, "
-            f"cool-down, and any advice to address physical concerns."
-        )
-
+       prompt = (
+    f"You are a track and field coach. Based on this athlete input:\n"
+    f"{user_input}\n"
+    f"Please create a customized training plan including warm-up, main workout, "
+    f"cool-down, and any advice to address physical concerns."
+)
         with st.spinner("Generating your plan..."):
             result = query({"inputs": full_prompt})
 
